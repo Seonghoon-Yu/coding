@@ -11,41 +11,82 @@ diamond = [(1, -1), (1, 1), (-1, 1), (-1, -1)]
 
 max_value = 0
 
+## 맨해튼 거리
+
 for i in range(n):
     for j in range(n):
-
-        current_value = 0
-        current_value += grid[i][j]
-
-        # k = 0 검사
-        cost = 1
-
-        if current_value * m >= cost:
-            max_value = max(max_value, current_value)
-
-        for k in range(0, 2 * (n-1)):
-            # print('k', k)
-            sx, sy = i-k, j
-
-            # if sx >= 0:
-                # current_value += grid[sx][sy]
-            
-            for d in diamond:
-                for _ in range(k):
-                    dx, dy = d
-                    sx += dx
-                    sy += dy
-                    if sx >= 0 and sx < n:
-                        if sy >= 0 and sy < n:
-                            current_value += grid[sx][sy] 
-
-            current_gold = current_value * m
+        for k in range(2*(n-1)+1):
+            current_value = 0
             cost = k*k + (k+1)*(k+1)
-            current_cost = current_gold - cost
-            if current_cost >= 0:
+
+            for c in range(n):
+                for d in range(n):
+                    if abs(c-i) + abs(d-j) <= k:
+                        current_value += grid[c][d]
+            
+            current_gain = current_value * m
+            
+            if current_gain - cost >= 0:
                 max_value = max(max_value, current_value)
 
+
+# i=1
+# j=1
+# for k in range(2*(n-1)+1):
+#     current_value = 0
+#     cost = k*k + (k+1)*(k+1)
+
+#     for c in range(n):
+#         for d in range(m):
+#             if abs(c-i) + abs(d-j) <= k:
+#                 print(c, d)
+#                 current_value += grid[c][d]
+    
+#     current_gain = current_value * m
+    
+#     if current_gain - cost >= 0:
+#         max_value = max(max_value, current_value)
+
+
 print(max_value)
+
+
+
+# for i in range(n):
+#     for j in range(n):
+
+#         current_value = 0
+#         current_value += grid[i][j]
+
+#         # k = 0 검사
+#         cost = 1
+
+#         if current_value * m >= cost:
+#             max_value = max(max_value, current_value)
+
+#         for k in range(0, 2 * (n-1) + 1):
+#             # print('k', k)
+#             sx, sy = i-k, j
+
+#             # if sx >= 0:
+#                 # current_value += grid[sx][sy]
+            
+#             for d in diamond:
+#                 for _ in range(k):
+#                     dx, dy = d
+#                     sx += dx
+#                     sy += dy
+#                     if sx >= 0 and sx < n:
+#                         if sy >= 0 and sy < n:
+#                             current_value += grid[sx][sy] 
+
+#             current_gold = current_value * m
+#             cost = k*k + (k+1)*(k+1)
+#             current_cost = current_gold - cost
+#             if current_cost >= 0:
+#                 max_value = max(max_value, current_value)
+
+# print(max_value)
 
 
 
