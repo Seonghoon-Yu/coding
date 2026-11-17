@@ -25,33 +25,30 @@ def check_range(x, y):
 max_value = 0
 
 for i in range(n):
-
     for j in range(n):
-        
+
         for w in range(1, n):
             for h in range(1, n):
                 wh = [w, h, w, h]
-                
-                current_value = 0
-                flag=True
                 cx, cy = i, j
-                    
-                for b, k in zip(block, wh):
+
+                current_sum = 0
+                possible = True
+                
+                # current_sum += grid[i][j]
+
+                for b, length in zip(block, wh):
                     dx, dy = b
-                    for _ in range(k):
-                        
+                    for _ in range(length):
                         cx += dx
                         cy += dy
-
                         if check_range(cx, cy):
-                            current_value += grid[cx][cy]
-                            
+                            current_sum += grid[cx][cy]
                         else:
-                            current_value = 0
-                            flag = False
-
-                if flag:
-                    max_value = max(max_value, current_value)
-
+                            possible=False
+                            
+                
+                if possible:
+                    max_value = max(max_value, current_sum)
 
 print(max_value)
