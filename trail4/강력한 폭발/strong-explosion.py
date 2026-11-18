@@ -29,6 +29,10 @@ block = [
 ]
 
 
+boomed = [[0] * n for _ in range(n)]
+
+
+
 coords = []
 for i in range(n):
     for j in range(n):
@@ -37,30 +41,62 @@ for i in range(n):
 
 max_value = 0
 
-def dfs(index, count, total):
-    global answer, max_value
-    if count == len(coords):
-        answer = set()
-        for t in total:
-            for _ in t:
-                answer.add(_)
-        
-        max_value = max(max_value, len(answer))
+def dfs(index, boomed):
+    global max_value
+
+    if index == len(coords):
+        summed = 0
+        for b in boomed:
+            summed += sum([x > 0 for x in b])
+        max_value = max(max_value, summed)
         return
     
-
     coord = coords[index]
     cx, cy = coord
 
     for b in block:
-        boomed = set()
-        for (dx, dy) in b:
-            if (0 <= (cx + dx) < n) and (0 <= (cy + dy) < n):
-                boomed.add((cx+dx, cy+dy))
-        total.append(boomed)
-        dfs(index+1, count+1, total)
-        total.pop()
+        for dx, dy in b:
+            if (0<= (cx+dx) < n) and (0<= (cy+dy) <n):
+                boomed[cx+dx][cy+dy] += 1
+            
+        dfs(index+1, boomed)
 
-dfs(0,0,[])
-# print(answer)
+        for dx, dy in b:
+            if (0<= (cx+dx) < n) and (0<= (cy+dy) <n):
+                boomed[cx+dx][cy+dy] -= 1            
+        
+dfs(0, boomed)
+
 print(max_value)
+
+
+
+
+
+# def dfs(index, count, total):
+#     global answer, max_value
+#     if count == len(coords):
+#         answer = set()
+#         for t in total:
+#             for _ in t:
+#                 answer.add(_)
+        
+#         max_value = max(max_value, len(answer))
+#         return
+    
+
+#     coord = coords[index]
+#     cx, cy = coord
+
+#     for b in block:
+#         boomed = set()
+#         for (dx, dy) in b:
+#             if (0 <= (cx + dx) < n) and (0 <= (cy + dy) < n):
+#                 boomed.add((cx+dx, cy+dy))
+#         total.append(boomed)
+#         dfs(index+1, count+1, total)
+#         total.pop()
+
+# dfs(0,0,[])
+# # print(answer)
+# print(max_value)
