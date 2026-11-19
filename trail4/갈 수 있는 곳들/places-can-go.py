@@ -11,11 +11,14 @@ points = [tuple(map(int, input().split())) for _ in range(k)]
 
 directions = [(0,1), (0,-1), (1,0), (-1, 0)]
 
-def bfs(r, c):
+def bfs():
     queue = deque()
 
-    queue.append((r,c))
-    visited[r][c] += 1
+    for r, c in points:
+
+
+        queue.append((r-1,c-1))
+        visited[r-1][c-1] = True
 
     while queue:
 
@@ -32,15 +35,14 @@ def bfs(r, c):
                         queue.append((nx,ny))
 
 
-visited = [[0] * n for _ in range(n)]
-for index in range(k):
-    r, c = points[index]
-    bfs(r-1, c-1)
+visited = [[False] * n for _ in range(n)]
+
+bfs()
 
 count = 0
-for v in visited:
-    for _ in v:
-        if _ > 0:
-            count +=1
+for i in range(n):
+    for j in range(n):
+        if visited[i][j]:
+            count += 1
 
 print(count)
