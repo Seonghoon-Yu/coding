@@ -27,59 +27,72 @@ directions = [(0,1), (0,-1), (1,0), (-1,0)]
 ### 중간중간 들리면서 max check하면서 시작점보다 작은거 check
 ### 나중에 dict에서 max값 꺼내와서 좌표 비교
 
-
 def bfs(r, c):
-    global val_dict, max_val
     queue = deque()
     queue.append((r,c))
+
     visited[r][c] = True
 
-    val_dict = defaultdict(list)
-
     start_val = grid[r][c]
-    max_val = 0
+
+    best_r, best_c = -1, -1
 
     while queue:
+        
+        sr, sc = queue.popleft()
 
-        r, c = queue.popleft()
+        for dr, dc in directions:
+            nr, nc = sr+dr, sc+dc
 
-        start_len = len(queue)
+            if not (0 <= nr < n and 0 <= nc < n):
+                continue
+            
+            if visited[nr][nc]:
+                continue
+            
+            if start_val <= grid[nr][nc]:
+                continue
+            
+            visited[nr][nc] = True
+            queue.append((nr,nc))
 
-        for dx, dy in directions:
-            nx, ny = r+dx, c+dy
 
-            if 0 <= nx < n and 0 <= ny < n:
-                if not visited[nx][ny]:
-                    if start_val > grid[nx][ny]:
-                        visited[nx][ny] = True
-                        
-                        cur_val = grid[nx][ny]
-                        max_val = max(cur_val, max_val)
+            ## 현재 best가 없다면
+            if best_r == -1 and best_c == -1:
+                best_r, best_c = nr, nc
+            else:
+                if grid[best_r][best_c] < grid[nr][nc]: # best 보다 크면
+                    best_r, best_c = nr, nc
 
-                        val_dict[cur_val].append((nx,ny))
-                        queue.append((nx, ny))
+                elif grid[best_r][best_c] == grid[nr][nc]: # 같으면
+                    ###
+                    if best_r > nr:
+                        best_r = nr
+                        best_c = nc
+                    if best_r == nr and best_c > nc:
+                        best_r = nr
+                        best_c = nc
 
-        last_len = len(queue)
+    if best_r == -1 and best_c == -1:
+        return None
+
+    return (best_r, best_c)
+
+            
+
+            
 
 
 
 r -= 1
 c -= 1
+
 for _ in range(k):
     visited = [[False] * n for _ in range(n)]
-    bfs(r,c)
+    next_pos = bfs(r, c)
 
-    if not val_dict:
+    if next_pos == None:
         break
-
-    a = val_dict[max_val]
-    a.sort(key=lambda x: (-x[0], -x[1]))
-    r, c = a[-1]
-
-    r, c = min(a)
-
-
-    # print(val_dict.keys())
-    # break
+    r, c = next_pos
 
 print(r+1, c+1)
