@@ -3,65 +3,79 @@ grid = [list(map(int, input().split())) for _ in range(n)]
 
 # Please write your code here.
 
-
-## 1. 직사각형
-## i,j 부터 시작해서 모든 가능한 직사각형 check
-## 2. 직사각형
-## i,j부터 시작해서 1과 겹치지 않는 모든 가능한 직사각형 check
-
-max_sum = -float('inf')
-
-#### 두 직사각형의 첫점과 끝점을 구한다.
-#### 두 직사각형 사이의 첫점과 끝점이 overlab 되지 않으면 current sum을 계산한다.
-
-# 첫번째 직사각형 (x1, y1, x2, y2)
-# 두번째 직사각형 (x3, y3, x3, y3)
-
-for x1 in range(n):
-    for y1 in range(m):
-        for x2 in range(x1, n):
-            for y2 in range(y1, m):
-                for x3 in range(n):
-                    for y3 in range(m):
-                        for x4 in range(x3, n):
-                            for y4 in range(y3, m):
+## 서로 겹치지 않는 두 직사각형.
+## 두 직사각형 안에 정수 값들의 총 합을 최데
+# 직사각형은 크기 탐색?
 
 
-                                # ## overlab 구하는 법
-                                # x_range_1 = [x for x in range(x1, x2+1)]
-                                # x_range_2 = [x for x in range(x3, x4+1)]
-                                # y_range_1 = [y for y in range(y1, y2+1)]
-                                # y_range_2 = [y for y in range(y3, y4+1)]
+### 두 좌표가 주어졌을때, 해당 좌표의 직사각형 합
+def rec(tl, br):
+    x1, y1 = tl
+    x2, y2 = br
 
-                                # x_overlab = set(x_range_1) & set(x_range_2)
-                                # y_overlab = set(y_range_1) & set(y_range_2)
+    count = 0
+    for i in range(x1, x2):
+        for j in range(y1, y2):
+            count += grid[i][j]
 
-                                # if x_overlab or y_overlab:
-                                #     continue
-
-                                ### 좌표로 overlab 구하는 법
-                                current_sum = 0
+    return count
 
 
-                                if x2 < x3 or y2 < y3 or x4 < x1 or y4 < y1: # overlab이 없는 경우
-                                    ### 첫번째 상자 sum
-                                    for cx in range(x1, x2+1):
-                                        for cy in range(y1, y2+1):
-                                            current_sum += grid[cx][cy]
-                                    
-                                    for cx in range(x3, x4+1):
-                                        for cy in range(y3, y4+1):
-                                            current_sum += grid[cx][cy]
-                                    
-                                    max_sum = max(max_sum, current_sum)
+### 두 직사각형의 시작 좌표 완전 탐색
+### 두 직사각형의 크기 완전 탐색, 모서리를 활용
 
-print(max_sum)
+max_count = -float('inf')
+for i in range(n):
+    for j in range(m):
+        for r in range(n):
+            for c in range(m):
 
-    #                             break
-    #                         break
-    #                     break
-    #                 break
-    #             break
-    #         break
-    #     break
-    # break
+                ###########################
+                # 첫번째 직사각형 크기 탐색 #
+                ###########################
+
+                ## 상단 왼쪽은 시작점 
+                tl = (i, j)
+                
+                ## 하단 오른쪽은 탐색
+                for br_i in range(i+1, n+1):
+                    for br_j in range(j+1, m+1):
+                        
+                        ### 첫번째 직사각형 좌표
+                        br = (br_i, br_j)
+
+                        ### 첫번째 직사각형의 합 계산
+                        first_rec_count = rec(tl, br)
+
+
+                ############################
+                # 두 번째 직사각형 크기 탐색 #
+                ############################ 
+
+                        tl_2 = (r, c)
+                        
+                        for br_2_i in range(r+1, n+1):
+                            for br_2_j in range(c+1, m+1):
+
+                                ## 두번째 직사각형 ㅘ표
+                                br_2 = (br_2_i, br_2_j)
+
+                                ### 겹치는지 확인
+
+                                if not (br_i <= r or br_j <= c):
+                                    if not (br_2_i <= i or br_2_j <= j):
+                                        continue
+
+                                # print(tl, br, 'next ',tl_2, br_2)
+                                second_rec_count = rec(tl_2, br_2)
+                        
+                                
+                                max_count = max(max_count, first_rec_count + second_rec_count)
+
+print(max_count)
+
+
+
+
+
+
