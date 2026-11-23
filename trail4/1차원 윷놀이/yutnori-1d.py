@@ -37,13 +37,14 @@ def dfs(index):
         return
 
     n = nums[index]
+    
 
     for i in range(len(horse)):
-        # if horse[i] >= m:
-        #     continue
-        horse[i] += n
+        prev = horse[i]
+        if horse[i] < m:
+            horse[i] += n
         dfs(index+1)
-        horse[i] -= n
+        horse[i] = prev
 
 dfs(0)
 
