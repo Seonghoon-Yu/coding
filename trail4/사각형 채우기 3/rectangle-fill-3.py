@@ -37,13 +37,22 @@ l or ㅁㅁ
 
 # 구현
 
+## prefix는 이전까지 합을 저장해둔것
+prefix = [0] * max(n+2, 3)
+prefix[0] = dp[0]
+prefix[1] = dp[1] + prefix[0]
+prefix[2] = dp[2] + prefix[1]
+
 for i in range(3, n+1):
-    # print('i', i)
-    # print('sum', sum([2 * dp[j] for j in range(i, 1, -2)]))
-    # print('sum', 2 * dp[i-1] + 3 * dp[i-2])
-    dp[i] = 2 * dp[i-1] + 3 * dp[i-2] + 2* sum(dp[:i-2])
-    dp[i] %= 1_000_000_007
+    # dp[i] = 2 * dp[i-1] + 3 * dp[i-2] + 2* sum(dp[:i-2])
+    # dp[i] %= 1_000_000_007
 
 
+    dp[i] = 2 * dp[i-1] + 3 * dp[i-2] + 2 * prefix[i-3]
 
-print(dp[n])
+    prefix[i] = dp[i] + prefix[i-1]
+    # dp[i] %= 1_000_000_007
+
+
+answer = dp[n] % 1_000_000_007
+print(answer)
