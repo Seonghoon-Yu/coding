@@ -20,18 +20,21 @@ e1 -= 1
 s2 -= 1
 e2 -= 1
 
+# def remove(s, e):
+#     temp = []
+
+#     count = 0
+#     for b in blocks:
+
+#         if not(s <= count <= e):
+#             temp.append(b)
+
+#         count += 1
+
+#     return temp
+
 def remove(s, e):
-    temp = []
-
-    count = 0
-    for b in blocks:
-
-        if not(s <= count <= e):
-            temp.append(b)
-
-        count += 1
-
-    return temp
+    return blocks[:s] + blocks[e+1:]
 
 
 blocks = remove(s1, e1)
